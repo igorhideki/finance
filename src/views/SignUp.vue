@@ -19,9 +19,18 @@
           placeholder="Senha"
         >
         <button type="submit">
-          Criar conta
+          <span v-if="loading">
+            Carregando
+            <fa-icon
+              icon="spinner"
+              spin
+            />
+          </span>
+          <span v-else>
+            Criar conta
+          </span>
         </button>
-        <router-link to="/register">
+        <router-link to="/login">
           Já tenho login
         </router-link>
       </form>
@@ -30,6 +39,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 import LayoutAuth from '@/layouts/LayoutAuth'
 
 export default {
@@ -41,20 +52,27 @@ export default {
     return {
       name: '',
       email: '',
-      password: ''
+      password: '',
+      loading: false
     }
   },
   methods: {
+    ...mapActions('auth', ['register']),
+
     onSubmit (e) {
+      if (this.loading) return
+
       if (this.name && this.email && this.password) {
-        const user = {
+        this.loading = true
+
+        this.register({
           name: this.name,
           email: this.email,
           password: this.password
-        }
-
-        localStorage.setItem(this.email, JSON.stringify(user))
-        this.$router.push({ name: 'login' })
+        }).finally(() => {
+          this.loading = true
+          this.$router.push({ name: 'login' })
+        })
       }
     }
   }

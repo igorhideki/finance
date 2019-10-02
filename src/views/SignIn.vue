@@ -22,7 +22,16 @@
           type="
           submit"
         >
-          Acessar
+          <span v-if="loading">
+            Carregando
+            <fa-icon
+              icon="spinner"
+              spin
+            />
+          </span>
+          <span v-else>
+            Acessar
+          </span>
         </button>
         <router-link to="/register">
           Criar conta
@@ -33,6 +42,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 import LayoutAuth from '@/layouts/LayoutAuth'
 
 export default {
@@ -44,27 +55,29 @@ export default {
     return {
       email: '',
       password: '',
-      message: ''
+      message: '',
+      loading: false
     }
   },
   methods: {
+    ...mapActions('auth', ['logIn']),
+
     onSubmit (e) {
       if (!(this.email || this.password)) return
 
-      const user = localStorage.getItem(this.email)
+      if (this.loading) return
 
-      if (user) {
-        const userData = JSON.parse(user)
+      this.loading = true
 
-        if (userData.password === this.password) {
-          const token = new Date().getTime
-
-          localStorage.setItem(this.email, JSON.parse({ ...userData, token }))
-          this.$router.push('/')
-        } else {
-          this.message = 'Dados incorretos, verifique os campos acima'
-        }
-      }
+      this.logIn({
+        email: this.email,
+        password: this.password
+      }).then(() => {
+        this.$router.push('/')
+      }).catch(error => {
+        this.message = error.message
+        this.loading = false
+      })
     }
   }
 }

@@ -54,7 +54,7 @@ export default {
       }
     }
 
-    span {
+    > span {
       margin-bottom: 10px;
       align-self: flex-start;
       color: $danger;
