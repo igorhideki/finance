@@ -13,7 +13,15 @@
           type="password"
           placeholder="Senha"
         >
-        <button type="submit">
+        <span
+          v-show="message"
+        >
+          {{ message }}
+        </span>
+        <button
+          type="
+          submit"
+        >
           Acessar
         </button>
         <router-link to="/register">
@@ -35,13 +43,27 @@ export default {
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      message: ''
     }
   },
   methods: {
     onSubmit (e) {
-      if (this.email && this.password) {
-        this.$router.push('/')
+      if (!(this.email || this.password)) return
+
+      const user = localStorage.getItem(this.email)
+
+      if (user) {
+        const userData = JSON.parse(user)
+
+        if (userData.password === this.password) {
+          const token = new Date().getTime
+
+          localStorage.setItem(this.email, JSON.parse({ ...userData, token }))
+          this.$router.push('/')
+        } else {
+          this.message = 'Dados incorretos, verifique os campos acima'
+        }
       }
     }
   }

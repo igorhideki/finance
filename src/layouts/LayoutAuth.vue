@@ -54,6 +54,12 @@ export default {
       }
     }
 
+    span {
+      margin-bottom: 10px;
+      align-self: flex-start;
+      color: $danger;
+    }
+
     button {
       margin: 5px 0 0;
       height: 44px;
