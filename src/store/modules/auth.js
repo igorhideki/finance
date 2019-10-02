@@ -19,6 +19,10 @@ const mutations = {
   SET_USER (state, user) {
     state.user = user
     saveState(user.email, user)
+  },
+
+  RESET (state) {
+    Object.assign(state, initialState())
   }
 }
 
@@ -48,6 +52,13 @@ const actions = {
         resolve()
       }, 2000)
     })
+  },
+
+  logOut ({ state, commit }) {
+    const { token, ...user } = state.user
+
+    saveState(user.email, user)
+    commit('RESET')
   }
 }
 
