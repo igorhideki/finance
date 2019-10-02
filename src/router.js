@@ -2,16 +2,21 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home'
 
+import store from './store'
+
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      meta: {
+        isPrivate: true
+      }
     },
     {
       path: '/login',
@@ -26,7 +31,28 @@ export default new Router({
     {
       path: '/about',
       name: 'about',
-      component: () => import('./views/About')
+      component: () => import('./views/About'),
+      meta: {
+        isPrivate: true
+      }
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (store.getters['auth/loggedIn']()) {
+    if (to.meta && to.meta.isPrivate) {
+      return next()
+    } else {
+      return next('/')
+    }
+  }
+
+  if (to.meta && to.meta.isPrivate) {
+    return next('/login')
+  }
+
+  return next()
+})
+
+export default router

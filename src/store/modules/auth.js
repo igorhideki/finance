@@ -1,4 +1,4 @@
-const sessionTimeOut = 60
+const sessionTimeOut = 5 * 60 * 1000 // sessionTimeout 5 min
 
 const initialState = () => ({
   user: {}
@@ -7,7 +7,7 @@ const initialState = () => ({
 const state = initialState
 
 const getters = {
-  loggedIn: ({ user }) => {
+  loggedIn: ({ user }) => () => {
     const { token } = user
     const now = new Date().getTime()
 
