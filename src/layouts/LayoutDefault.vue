@@ -18,4 +18,10 @@ export default {
   height: 100%;
   background: $gradient-linear;
 }
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 30px;
+}
 </style>

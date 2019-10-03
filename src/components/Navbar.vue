@@ -56,6 +56,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     height: 64px;
+    margin: 0 auto;
   }
 
   .brand {
