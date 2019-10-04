@@ -27,7 +27,6 @@ const mutations = {
   },
 
   SET_CURRENCY_SELECTED (state, currency) {
-    console.log(currency)
     state.currencySelected = currency
   }
 }
@@ -43,9 +42,6 @@ const actions = {
       })
       .then(({ data }) => {
         commit('SET_DATA', data)
-      })
-      .catch(error => {
-        console.log(error)
       })
   }
 }
