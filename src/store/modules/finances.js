@@ -1,7 +1,8 @@
 import api from '@/services/api'
 
 const initialState = () => ({
-  data: {}
+  data: {},
+  currencySelected: {}
 })
 
 const state = initialState
@@ -23,6 +24,11 @@ const getters = {
 const mutations = {
   SET_DATA (state, data) {
     state.data = data
+  },
+
+  SET_CURRENCY_SELECTED (state, currency) {
+    console.log(currency)
+    state.currencySelected = currency
   }
 }
 

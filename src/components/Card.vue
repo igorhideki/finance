@@ -1,5 +1,8 @@
 <template>
-  <div class="card">
+  <div
+    class="card"
+    @click="$emit('click')"
+  >
     <slot />
   </div>
 </template>
