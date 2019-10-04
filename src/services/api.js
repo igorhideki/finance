@@ -1,10 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  baseURL: 'https://api.hgbrasil.com'
+  baseURL: 'https://api.hgbrasil.com/finance'
 })
 
 export default api

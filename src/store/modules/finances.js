@@ -1,5 +1,4 @@
 import api from '@/services/api'
-import mockFinance from '@/mocks/financeResponse'
 
 const initialState = () => ({
   data: {}
@@ -16,9 +15,9 @@ const getters = {
     }
     return {}
   },
-  bitcoin: ({ data }) => data.results ? data.results.bitcoin : [],
-  stocks: ({ data }) => data.results ? data.results.stocks : [],
-  taxex: ({ data }) => data.results ? data.results.taxes : []
+  bitcoin: ({ data }) => data.results ? data.results.bitcoin : {},
+  stocks: ({ data }) => data.results ? data.results.stocks : {},
+  taxes: ({ data }) => data.results ? data.results.taxes : {}
 }
 
 const mutations = {
@@ -30,9 +29,10 @@ const mutations = {
 const actions = {
   fetchData ({ commit }) {
     return api
-      .get('/finance', {
+      .get('/quotations', {
         params: {
-          key: process.env.VUE_APP_HG_KEY
+          key: process.env.VUE_APP_HG_KEY,
+          format: 'json-cors'
         }
       })
       .then(({ data }) => {
@@ -40,9 +40,6 @@ const actions = {
       })
       .catch(error => {
         console.log(error)
-      })
-      .then(() => {
-        commit('SET_DATA', mockFinance)
       })
   }
 }
