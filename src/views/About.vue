@@ -1,8 +1,10 @@
 <template>
   <layout-default>
     <navbar />
-    <div class="about">
-      About
+    <div class="container">
+      <div class="about">
+        Em construção...
+      </div>
     </div>
   </layout-default>
 </template>
