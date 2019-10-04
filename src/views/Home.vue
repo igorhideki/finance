@@ -3,66 +3,63 @@
     <navbar />
     <div class="home">
       <div class="container">
-        <h3>Cotações moedas ({{ currencies.source }})</h3>
-        <section>
-          <card
-            v-for="(currency, key) in currencies.data"
-            :key="key"
-          >
-            <header>
-              <div class="title">
-                {{ key }}
-              </div>
-              <badge :state="getState(currency.variation)">
-                {{ currency.variation }}
-              </badge>
-            </header>
-            <div class="subtitle">
-              {{ currency.name }}
-            </div>
-            <div class="info">
-              {{ currency.buy | formatPrice }}
-            </div>
-          </card>
-        </section>
+        <template v-if="loading">
+          <div>
+            <span>Carregando </span>
+            <fa-icon
+              icon="spinner"
+              spin
+            />
+          </div>
+        </template>
+        <template v-else>
+          <section class="list">
+            <currency-list />
+          </section>
+
+          <section class="list">
+            <stock-list />
+          </section>
+
+          <section class="list">
+            <bitcoin-list />
+          </section>
+        </template>
       </div>
     </div>
   </layout-default>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
 import LayoutDefault from '@/layouts/LayoutDefault'
 import Navbar from '@/components/Navbar'
-import Card from '@/components/Card'
-import Badge from '@/components/Badge'
-
-import { formatPrice } from '@/util/format'
+import CurrencyList from '@/components/CurrencyList'
+import StockList from '@/components/StockList'
+import BitcoinList from '@/components/BitcoinList'
 
 export default {
   name: 'Home',
   components: {
     LayoutDefault,
     Navbar,
-    Card,
-    Badge
+    CurrencyList,
+    StockList,
+    BitcoinList
   },
-  filters: {
-    formatPrice
+  data () {
+    return {
+      loading: false
+    }
   },
-  computed: {
-    ...mapGetters('finances', ['currencies'])
-  },
-  created () {
-    this.fetchData()
+  async created () {
+    this.loading = true
+    await this.fetchData()
+    this.loading = false
   },
   methods: {
-    ...mapActions('finances', ['fetchData']),
-
-    getState (value) {
-      return value > 0 ? 'success' : 'danger'
-    }
+    ...mapActions('finances', ['fetchData'])
   }
 }
 </script>
@@ -71,47 +68,8 @@ export default {
 .home {
   color: #fff;
 
-  h3 {
-    font-weight: normal;
-    margin-bottom: 20px;
-  }
-}
-
-section {
-  display: flex;
-
-  .card {
-    display: flex;
-    flex-direction: column;
-    flex-basis: 20%;
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-
-    .title {
-      font-weight: bold;
-      color: $accent;
-      font-size: 18px;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      color: $primary-dark;
-      margin-bottom: 10px;
-    }
-
-    .info {
-      font-size: 22px;
-      text-align: right;
-      margin-top: auto;
-    }
-  }
-
-  .card + .card {
-    margin-left: 10px;
+  .list + .list {
+    margin-top: 30px;
   }
 }
 </style>
